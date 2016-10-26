@@ -29,7 +29,7 @@ filter_data_t filter_data ={0.0f};
 #define A3 -2.444765517272841f
 #define A4  0.527149895089809f
 
-float cheby2_filter(float input, filter_data_t * fd)
+float iir_filter(float input, filter_data_t * fd)
 {
     float output;
 
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 		/* read sensor data */
 		
 		/* do filtering */
-		filted_data[count] = cheby2_filter(raw_data[count], &filter_data);
+		filted_data[count] = iir_filter(raw_data[count], &filter_data);
 		
 		/* log filted data */
 		fprintf(fd,"%f\n", filted_data[count]);
