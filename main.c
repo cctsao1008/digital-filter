@@ -174,9 +174,10 @@ void sensor_data_write(float data)
     }
 }
 
-float sensor_data_read(uint16_t count)
+float sensor_data_read(void)
 {
-    return raw_data[count];
+    static uint16_t count = 0;
+    return raw_data[count++];
 }
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
@@ -194,7 +195,7 @@ int main(int argc, char *argv[]) {
     
     for(;;) {		
         /* read sensor data */
-        data = sensor_data_read(count);
+        data = sensor_data_read();
 
         /* do filtering */
         #if defined(IIR)
