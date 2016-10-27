@@ -1,3 +1,11 @@
+/**
+ * @file main.c
+ *
+ * IIR/FIR Filter implementation
+ *
+ * @author Ricardo <tsao.ricardo@iac.com.tw>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -43,14 +51,14 @@ float cheby2_filter(float input, filter_data_t * fd)
     float output;
 
     output = B0 * input + 
-	         B1 * fd->input_t1 + 
-			 B2 * fd->input_t2 + 
-			 B3 * fd->input_t3 + 
-			 B4 * fd->input_t4 - 
-			 A1 * fd->output_t1 - 
-			 A2 * fd->output_t2 - 
-			 A3 * fd->output_t3 - 
-			 A4 * fd->output_t4;
+             B1 * fd->input_t1 + 
+             B2 * fd->input_t2 + 
+             B3 * fd->input_t3 + 
+             B4 * fd->input_t4 - 
+             A1 * fd->output_t1 - 
+             A2 * fd->output_t2 - 
+             A3 * fd->output_t3 - 
+             A4 * fd->output_t4;
 
     fd->input_t4 = fd->input_t3;
     fd->input_t3 = fd->input_t2;
@@ -89,27 +97,27 @@ float fir1_filter(float input, filter_data_t * fd)
     float output;
 
     output = H0 * input + 
-	         H1 * fd->input_t1 + 
-			 H2 * fd->input_t2 + 
-			 H3 * fd->input_t3 + 
-			 H4 * fd->input_t4 +
-			 H5 * fd->input_t5 +
-			 H6 * fd->input_t6 +
-			 H7 * fd->input_t7 +
-			 H8 * fd->input_t8 +
-			 H9 * fd->input_t9 +
-			 H10 * fd->input_t10 +
-			 H11 * fd->input_t11 +
-			 H12 * fd->input_t12;;
+             H1 * fd->input_t1 + 
+             H2 * fd->input_t2 + 
+             H3 * fd->input_t3 + 
+             H4 * fd->input_t4 +
+             H5 * fd->input_t5 +
+             H6 * fd->input_t6 +
+             H7 * fd->input_t7 +
+             H8 * fd->input_t8 +
+             H9 * fd->input_t9 +
+             H10 * fd->input_t10 +
+             H11 * fd->input_t11 +
+             H12 * fd->input_t12;;
 
-	fd->input_t12 = fd->input_t11;
-	fd->input_t11 = fd->input_t10;
-	fd->input_t10 = fd->input_t9;
-	fd->input_t9 = fd->input_t8;
-	fd->input_t8 = fd->input_t7;
-	fd->input_t7 = fd->input_t6;
-	fd->input_t6 = fd->input_t5;
-	fd->input_t5 = fd->input_t4;
+    fd->input_t12 = fd->input_t11;
+    fd->input_t11 = fd->input_t10;
+    fd->input_t10 = fd->input_t9;
+    fd->input_t9 = fd->input_t8;
+    fd->input_t8 = fd->input_t7;
+    fd->input_t7 = fd->input_t6;
+    fd->input_t6 = fd->input_t5;
+    fd->input_t5 = fd->input_t4;
     fd->input_t4 = fd->input_t3;
     fd->input_t3 = fd->input_t2;
     fd->input_t2 = fd->input_t1;
@@ -143,62 +151,62 @@ int main(int argc, char *argv[]) {
     float raw_data[DATE_COUNT] = {0.0f};
     float filtered_data[DATE_COUNT] = {0.0f};
 
-	/* Load raw data */
-	{
-		file = fopen("raw_data.csv", "r");
-		fread(tmp_buf, 10, DATE_COUNT, file);
-		fclose(file);
+    /* Load raw data */
+    {
+        file = fopen("raw_data.csv", "r");
+        fread(tmp_buf, 10, DATE_COUNT, file);
+        fclose(file);
     
-		file = fopen("filtered_data.csv", "w"); 
+        file = fopen("filtered_data.csv", "w"); 
 
-		substr = strtok(tmp_buf, "\r\n");
+        substr = strtok(tmp_buf, "\r\n");
  
-		while (substr != NULL && count != DATE_COUNT) {
-			raw_data[count++] = atof(substr);
-			//printf("float data = %f\n", atof(tok));
-			substr = strtok(NULL, "\r\n");
-		}
+        while (substr != NULL && count != DATE_COUNT) {
+            raw_data[count++] = atof(substr);
+            //printf("float data = %f\n", atof(tok));
+            substr = strtok(NULL, "\r\n");
+        }
 
-		printf("raw data[%d] = %f\n", 0, raw_data[0]);
-		printf("raw data[%d] = %f\n", DATE_COUNT - 1, raw_data[DATE_COUNT - 1]);
+        printf("raw data[%d] = %f\n", 0, raw_data[0]);
+        printf("raw data[%d] = %f\n", DATE_COUNT - 1, raw_data[DATE_COUNT - 1]);
     
-		printf("count = %d\n", count);
+        printf("count = %d\n", count);
 
-		// check point
-		system("pause");
-	}
-	
-	count = 0;
-	
-	for(;;) {		
-		/* read sensor data */
-		
-		/* do filtering */
-		#if defined(IIR)
-		filtered_data[count] = cheby2_filter(raw_data[count], &fd);
-		#else
-		filtered_data[count] = fir1_filter(raw_data[count], &fd);
-		#endif
-		
-		/* log filtered data */
-		fprintf(file,"%f\n", filtered_data[count]);
-		count++;
-		
-		printf("count = %d\n", count);
-		
-		/* check end of data */
-		if(count == DATE_COUNT)
-		    break;
-		    
-		#if 0
-		msleep(10);
-		#endif
-	}
+        // check point
+        system("pause");
+    }
+    
+    count = 0;
+    
+    for(;;) {		
+        /* read sensor data */
+        
+        /* do filtering */
+        #if defined(IIR)
+        filtered_data[count] = cheby2_filter(raw_data[count], &fd);
+        #else
+        filtered_data[count] = fir1_filter(raw_data[count], &fd);
+        #endif
+        
+        /* log filtered data */
+        fprintf(file,"%f\n", filtered_data[count]);
+        count++;
+        
+        printf("count = %d\n", count);
+        
+        /* check end of data */
+        if(count == DATE_COUNT)
+            break;
+            
+        #if 0
+        msleep(10);
+        #endif
+    }
 
-	fclose(file);
+    fclose(file);
 
-	printf("finished!!\n");
+    printf("finished!!\n");
 
-	return 0;
+    return 0;
 }
 
