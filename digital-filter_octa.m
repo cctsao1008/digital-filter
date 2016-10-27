@@ -42,8 +42,8 @@ ylabel('DFT Values');
 x = filter(b,a,x);
 
 % FIR
-%h = fir1(12,12.5/50);
-%x = filter(h,1,x); 
+%b = fir1(12,12.5/50);
+%x = filter(b,1,x); 
 
 std(x)
 mean(x)
@@ -66,7 +66,13 @@ title('Double Sided FFT - with FFTShift');
 xlabel('Frequency(Hz)')	 	 
 ylabel('DFT Values');
 
+% IIR
 %figure
 %freqz(b,a)
 %freqz(b,a,[],100)
+
+% FIR
+%figure
+%freqz(b,1)
+%freqz(b,1,[],100)
 
