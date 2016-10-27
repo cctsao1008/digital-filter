@@ -170,11 +170,7 @@ int main(int argc, char *argv[]) {
 	
 	count = 0;
 	
-	for(;;) {
-		#if 0
-		msleep(10);
-		#endif
-		
+	for(;;) {		
 		/* read sensor data */
 		
 		/* do filtering */
@@ -193,6 +189,10 @@ int main(int argc, char *argv[]) {
 		/* check end of data */
 		if(count == DATE_COUNT)
 		    break;
+		    
+		#if 0
+		msleep(10);
+		#endif
 	}
 
 	fclose(file);
