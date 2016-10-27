@@ -15,12 +15,13 @@
 
 #define DATE_COUNT   10001
 
-//#define IIR
+#define IIR
 
 typedef struct {
     float input_t1, input_t2, input_t3, input_t4;
     
     #if !defined(IIR)
+    // FIR
     float input_t5, input_t6, input_t7, input_t8;
     float input_t9, input_t10, input_t11, input_t12;
     #endif
@@ -73,7 +74,7 @@ float cheby2_filter(float input, filter_data_t * fd)
     return output;
 }
 
-#else
+#else // FIR
 /*  12th Order Low Pass Filter for 100 Hz Data
  *  fir1(12,12.5/50), FIR Filter
  */
@@ -140,24 +141,20 @@ int msleep(unsigned long milisec)
     return 1;
 }
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+float raw_data[DATE_COUNT] = {0.0f};
 
-int main(int argc, char *argv[]) {
+void sensor_data_write(float data)
+{
     FILE *file = NULL;
     uint16_t count = 0;
     char *substr;
     char tmp_buf[DATE_COUNT*10] = {'\n'};
-    
-    float raw_data[DATE_COUNT] = {0.0f};
-    float filtered_data[DATE_COUNT] = {0.0f};
 
     /* Load raw data */
     {
         file = fopen("raw_data.csv", "r");
         fread(tmp_buf, 10, DATE_COUNT, file);
         fclose(file);
-    
-        file = fopen("filtered_data.csv", "w"); 
 
         substr = strtok(tmp_buf, "\r\n");
  
@@ -175,17 +172,35 @@ int main(int argc, char *argv[]) {
         // check point
         system("pause");
     }
+}
+
+float sensor_data_read(uint16_t count)
+{
+    return raw_data[count];
+}
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+int main(int argc, char *argv[]) {
+    FILE *file = NULL;
+    uint16_t count = 0;
     
-    count = 0;
+    float filtered_data[DATE_COUNT] = {0.0f};
+    float data;
+    
+    sensor_data_write(0);
+    
+    file = fopen("filtered_data.csv", "w+");
     
     for(;;) {		
         /* read sensor data */
-        
+        data = sensor_data_read(count);
+
         /* do filtering */
         #if defined(IIR)
-        filtered_data[count] = cheby2_filter(raw_data[count], &fd);
-        #else
-        filtered_data[count] = fir1_filter(raw_data[count], &fd);
+        filtered_data[count] = cheby2_filter(data, &fd);
+        #else // FIR
+        filtered_data[count] = fir1_filter(data, &fd);
         #endif
         
         /* log filtered data */
