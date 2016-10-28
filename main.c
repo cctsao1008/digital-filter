@@ -15,7 +15,7 @@
 
 #define DATE_COUNT   10001
 
-//#define IIR
+#define IIR
 
 typedef struct {
     float input_t1, input_t2, input_t3, input_t4;
