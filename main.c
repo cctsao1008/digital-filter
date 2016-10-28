@@ -15,7 +15,7 @@
 
 #define DATE_COUNT   10001
 
-#define IIR
+//#define IIR
 
 typedef struct {
     float input_t1, input_t2, input_t3, input_t4;
@@ -79,37 +79,37 @@ float cheby2_filter(float input, filter_data_t * fd)
  *  fir1(12,12.5/50), FIR Filter
  */
 
-#define H0  -0.004342695995163f
-#define H1  -0.006523576737266f
-#define H2   0.000000000000000f
-#define H3   0.041455122121951f
-#define H4   0.125395346860321f
-#define H5   0.216112849045374f
-#define H6   0.255805909409564f
-#define H7   0.216112849045374f
-#define H8   0.125395346860321f
-#define H9   0.041455122121951f
-#define H10  0.000000000000000f
-#define H11 -0.006523576737266f
-#define H12 -0.004342695995163f
+#define B0  -0.004342695995163f
+#define B1  -0.006523576737266f
+#define B2   0.000000000000000f
+#define B3   0.041455122121951f
+#define B4   0.125395346860321f
+#define B5   0.216112849045374f
+#define B6   0.255805909409564f
+#define B7   0.216112849045374f
+#define B8   0.125395346860321f
+#define B9   0.041455122121951f
+#define B10  0.000000000000000f
+#define B11 -0.006523576737266f
+#define B12 -0.004342695995163f
 
 float fir1_filter(float input, filter_data_t * fd)
 {
     float output;
 
-    output = H0 * input + 
-             H1 * fd->input_t1 + 
-             H2 * fd->input_t2 + 
-             H3 * fd->input_t3 + 
-             H4 * fd->input_t4 +
-             H5 * fd->input_t5 +
-             H6 * fd->input_t6 +
-             H7 * fd->input_t7 +
-             H8 * fd->input_t8 +
-             H9 * fd->input_t9 +
-             H10 * fd->input_t10 +
-             H11 * fd->input_t11 +
-             H12 * fd->input_t12;;
+    output = B0 * input + 
+             B1 * fd->input_t1 + 
+             B2 * fd->input_t2 + 
+             B3 * fd->input_t3 + 
+             B4 * fd->input_t4 +
+             B5 * fd->input_t5 +
+             B6 * fd->input_t6 +
+             B7 * fd->input_t7 +
+             B8 * fd->input_t8 +
+             B9 * fd->input_t9 +
+             B10 * fd->input_t10 +
+             B11 * fd->input_t11 +
+             B12 * fd->input_t12;;
 
     fd->input_t12 = fd->input_t11;
     fd->input_t11 = fd->input_t10;
